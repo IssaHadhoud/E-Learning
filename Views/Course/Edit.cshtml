@@ -1,0 +1,99 @@
+@model E_learning.ViewModel.CourseViewModel
+
+@{
+    Layout = null;
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        font-family: Arial, sans-serif;
+      background-color: #1a1e21;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container-fluid {
+        background-color: #a5a5a5;
+        border-radius: 20px;
+        box-shadow: 20px 10px 30px #ccc;
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        max-width: 800px;
+        padding: 40px;
+    }
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        width: 150px;
+        font-size: 18px;
+        color: #fff3cd;
+        margin-right: 20px;
+        text-align: right;
+    }
+    .form-group input[type=text], .form-group input[type=file] {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        background-color: #5c636a;
+        font-size: 16px;
+        color: #fff;
+        width: 100%;
+        max-width: 400px;
+    }
+    input[type=submit] {
+        background-color: #333333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    form div.submit-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<h2>Edit</h2>
+<div class="container">
+    <div class="container-fluid">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <!-- Title -->
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input type="text" id="Title" name="Title"  value="@Model.Title"/>
+            </div>
+            <div class="form-group">
+                <label for="Details">Details</label>
+                <input type="text" id="Details" name="Details" value="@Model.Details"/>
+            </div>
+            <div class="form-group">
+                <label for="Image">Image</label>
+                <input type="file" id="Image" name="Image" value="@Model.Image" />
+            </div>
+            
+            <div class="form-group">
+                <label for="Video">Video</label>
+                <input type="file" id="Video" name="Video" value="@Model.Video"/>
+            </div>
+            <div class="form-group">
+                <label for="Documents">Document</label>
+                <input type="file" id="Documents" name="Documents" value="@Model.Document"/>
+            </div>
+            <div class="submit-button">
+                <input type="submit" value="Edit"/>
+                <button asp-action="Index" class="btn btn-primary">Back</button>
+            </div>
+        </form>
+    </div>
+</div>

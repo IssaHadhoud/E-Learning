@@ -1,0 +1,123 @@
+@model E_learning.ViewModel.CourseViewModel
+
+@{
+    Layout = null;
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1e21;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container-fluid {
+        background-color: #a5a5a5;
+        border-radius: 20px;
+        box-shadow: 20px 10px 30px rgba(0, 0, 0, 0.3);
+        display: grid;
+        gap: 20px;
+        max-width: 800px;
+        padding: 40px;
+        width: 100%;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        width: 150px;
+        font-size: 18px;
+        color: #fcf6e4;
+        margin-right: 20px;
+        text-align: start;
+    }
+
+    .form-group input[type="text"], .form-group input[type="file"] {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background-color: #1c1f23;
+        font-size: 16px;
+        color: #fff3cd;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    input[type="submit"], .submit-button button {
+        background-color: #333333;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover, .submit-button button:hover {
+        background-color: #555555;
+    }
+
+    .submit-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<h2 style="text-align: center; color: #fff;">Course</h2>
+<div class="container">
+    <div class="container-fluid">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+               <label asp-for="Title"></label>
+               <input asp-for="Title" class="form-control" />
+               <span asp-validation-for="Title" class="text-danger"></span>
+           </div>
+       
+           <div class="form-group">
+               <label asp-for="Details"></label>
+               <input asp-for="Details" class="form-control" />
+               <span asp-validation-for="Details" class="text-danger"></span>
+           </div>
+       
+           <div class="form-group">
+               <label asp-for="Image"></label>
+               <input asp-for="Image" type="file" class="form-control" />
+           </div>
+       
+           <div class="form-group">
+               <label asp-for="Video"></label>
+               <input asp-for="Video" type="file" class="form-control" />
+           </div>
+       
+           <div class="form-group">
+               <label asp-for="Document"></label>
+               <input asp-for="Document" type="file" class="form-control" />
+           </div>
+       
+           <div class="form-group">
+               <label asp-for="Assignment"></label>
+               <input asp-for="Assignment" type="file" class="form-control" />
+           </div>
+       
+           <div class="submit-button">
+               <button type="submit" class="btn btn-primary">Submit</button>
+           </div>
+        </form>
+    </div>
+</div>

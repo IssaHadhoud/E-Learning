@@ -3,3 +3,4 @@ build-check/
 .idea/
 .bin/
 .vs/
+.obj/

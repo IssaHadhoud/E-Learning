@@ -1,16 +1,15 @@
-@model E_learning.Models.Student
-
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+@model E_learning.ViewModel.StudentDashboardViewModel
+@{ ViewData["Title"] = "My learning"; }
+<section class="dashboard-heading"><span class="eyebrow">YOUR LEARNING SPACE</span><h1>Welcome back, @Model.FirstName.</h1><p>Pick up a course and keep your momentum going.</p></section>
+<div class="d-flex align-items-end justify-content-between mb-4"><div><span class="eyebrow">MY COURSES</span><h2 class="section-title">Continue learning</h2></div><a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary">Explore courses</a></div>
+@if (Model.Courses.Count == 0)
+{
+    <div class="empty-state"><h3>Your learning journey starts here</h3><p>Browse the catalog and enroll in a course to see it here.</p><a asp-controller="Course" asp-action="Index" class="btn btn-primary">Explore courses</a></div>
 }
-
-<h2>title</h2>
-<div class="Container">
-    <div class="fluid-container">
-        <a asp-route-id="@Model.userID">
-        <h1>@Model.FirstName</h1>
-        <h2> @Model.LastName</h2>
-        </a>
-    </div>
-</div>
+else
+{
+    <div class="row g-4">@foreach (var course in Model.Courses)
+    {
+        <div class="col-md-6 col-xl-4"><article class="course-card h-100"><div class="course-card-image">@if (!string.IsNullOrWhiteSpace(course.ImageUrl)) { <img src="~/@course.ImageUrl" alt="" loading="lazy"/> } else { <span class="course-placeholder">LS</span> }</div><div class="course-card-body"><span class="course-tag">IN PROGRESS</span><h3>@course.Title</h3><div class="d-flex justify-content-between small text-secondary mb-2"><span>Progress</span><span>@course.ProgressPercent%</span></div><div class="progress mb-3" role="progressbar" aria-label="@course.Title progress" aria-valuenow="@course.ProgressPercent" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:@(course.ProgressPercent)%"></div></div><div class="course-card-footer"><span>@course.CompletedLessons / @course.TotalLessons lessons</span>@if (course.FirstLessonId is int lessonId) { <a asp-controller="Course" asp-action="Learn" asp-route-courseId="@course.CourseId" asp-route-lessonId="@lessonId" class="btn btn-primary btn-sm">Continue</a> }</div></div></article></div>
+    }</div>
+}

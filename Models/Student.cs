@@ -10,9 +10,9 @@ public class Student : Users
 
     [ForeignKey("CoursesId")]
     [DeleteBehavior(DeleteBehavior.NoAction)]
-    public Courses Courses { get; set; }
+    public Courses Courses { get; set; } = null!;
 
-    public string Schema { get; set; }
+    public string Schema { get; set; } = string.Empty;
     public int StudyHours { get; set; }
     public int Marks { get; set; }
 }

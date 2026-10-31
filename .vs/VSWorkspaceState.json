@@ -1,8 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ViewModel"
+    "\\.idea",
+    "\\Views",
+    "\\Views\\Course",
+    "\\Views\\Student",
+    "\\Views\\Teacher",
+    "\\wwwroot",
+    "\\wwwroot\\css",
+    "\\wwwroot\\Images"
   ],
-  "SelectedNode": "\\Program.cs",
   "PreviewInSolutionExplorer": false
 }

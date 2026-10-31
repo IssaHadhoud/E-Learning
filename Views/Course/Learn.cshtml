@@ -1,0 +1,13 @@
+@model E_learning.ViewModel.LessonLearningViewModel
+@{ ViewData["Title"] = Model.Lesson.Title; }
+<nav aria-label="Breadcrumb" class="small text-secondary mb-4"><a asp-action="Details" asp-route-id="@Model.Course.Id">@Model.Course.Title</a><span class="mx-2">/</span>@Model.Lesson.Title</nav>
+<div class="learning-shell">
+    <aside class="learning-sidebar"><span class="eyebrow">COURSE CONTENT</span><h2>@Model.Course.Title</h2><div class="d-flex justify-content-between small text-secondary mb-2"><span>Your progress</span><span>@Model.ProgressPercent%</span></div><div class="progress mb-4" role="progressbar" aria-label="Course progress" aria-valuenow="@Model.ProgressPercent" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:@(Model.ProgressPercent)%"></div></div>
+        @foreach (var module in Model.Course.Modules.OrderBy(m => m.SortOrder)) { <div class="learning-module"><strong>@module.Title</strong><ul>@foreach (var lesson in module.Lessons.OrderBy(l => l.SortOrder)) { <li class="@(lesson.Id == Model.Lesson.Id ? "active" : "")"><a asp-action="Learn" asp-route-courseId="@Model.Course.Id" asp-route-lessonId="@lesson.Id">@lesson.Title</a></li> }</ul></div> }
+    </aside>
+    <article class="learning-content"><span class="eyebrow">LESSON</span><h1>@Model.Lesson.Title</h1>@if (!string.IsNullOrWhiteSpace(Model.Lesson.Description)) { <p class="lead text-secondary">@Model.Lesson.Description</p> }
+        @if (!string.IsNullOrWhiteSpace(Model.Lesson.MediaUrl)) { <div class="lesson-media"><video controls preload="metadata"><source src="@Model.Lesson.MediaUrl"/>Your browser does not support video playback.</video></div> }
+        <div class="lesson-body">@if (!string.IsNullOrWhiteSpace(Model.Lesson.MediaUrl)) { <p>Watch the lesson, then mark it complete to update your course progress.</p> } else { <p>The instructor is preparing this lesson content.</p> }</div>
+        <div class="lesson-actions"><div>@if (Model.PreviousLessonId is int previous) { <a class="btn btn-outline-secondary" asp-action="Learn" asp-route-courseId="@Model.Course.Id" asp-route-lessonId="@previous">Previous lesson</a> }</div><form asp-action="MarkLessonComplete" method="post"><input type="hidden" name="courseId" value="@Model.Course.Id"/><input type="hidden" name="lessonId" value="@Model.Lesson.Id"/><button class="btn @(Model.IsCompleted ? "btn-outline-success" : "btn-primary")" type="submit">@(Model.IsCompleted ? "Completed" : "Mark as complete")</button></form><div>@if (Model.NextLessonId is int next) { <a class="btn btn-outline-secondary" asp-action="Learn" asp-route-courseId="@Model.Course.Id" asp-route-lessonId="@next">Next lesson</a> }</div></div>
+    </article>
+</div>

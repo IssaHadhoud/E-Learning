@@ -1,124 +1,20 @@
 @model E_learning.Models.Courses
-
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-}
-<style>
-body{
-    box-sizing: border-box;
-}
-
-    .container {
-    padding: 20px;
-    max-width: 900px;
-    margin: 5% 0;;
-}
-
-.container-fluid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Course details section */
-.Course-details {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Course image styling */
-.Course-Image img {
-    border-radius: 50%;
-    border: auto;
-    margin-bottom: 20px;
-}
-
-/* Course details text */
-.Course-details p {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Course video styling */
-.Course-Video video {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-/* Document button styling */
-.Document button {
-    margin-bottom: 20px;
-}
-
-.Document a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.Document a:hover {
-    text-decoration: underline;
-}
-
-/* Button styling */
-.btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-}
-
-.btn-outline-danger {
-    color: #dc3545;
-    border: 1px solid #dc3545;
-    background-color: transparent;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-outline-danger:hover {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-outline-primary {
-    color: #007bff;
-    border: 1px solid #007bff;
-    background-color: transparent;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-outline-primary:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-    
-</style>
-<body>
-<h2>Course Details</h2>
-<div class="container">
-    <div class="container-fluid">
-        <div class="Course-details">
-            <div class="Course-Image">
-                <center><img src="~/@Model.ImageURL" alt="Course Image" height="250" width="250" ></center> 
-            </div>
-            <div class="container-fluid">
-                <center><a>@Model.Details</a></center>
-            </div>
-            <div class="Course-Video">
-               <center><video src="~/@Model.VideoURL" /></center> 
-            </div>
-            <div class="Document">
-               <button class="btn btn-primary"><a href="~/@Model.Documents" download > Download Document</a> </button>
-            </div>
-        </div>
-        <a asp-action="Delete" asp-route-ID="@Model.Id" class="btn-btn-outline-danger">Delete</a>
-        <a asp-action="Edit" asp-route-ID="@Model.Id" class="btn-btn-outline-primary">Edit</a>
+@{ ViewData["Title"] = Model.Title; }
+<nav aria-label="Breadcrumb" class="small text-secondary mb-4"><a asp-action="Index">Courses</a><span class="mx-2">/</span>@Model.Title</nav>
+<div class="row g-5 course-detail-layout">
+    <div class="col-lg-8">
+        <span class="eyebrow">COURSE</span><h1 class="display-5 fw-bold mt-2">@Model.Title</h1><p class="lead text-secondary mt-3">@Model.Details</p>
+        <div class="course-detail-image mt-4">@if (!string.IsNullOrWhiteSpace(Model.ImageURL)) { <img src="~/@Model.ImageURL" alt="Course cover for @Model.Title"/> } else { <span class="course-placeholder">LearnSpace</span> }</div>
+        <section class="mt-5"><span class="eyebrow">WHAT YOU’LL LEARN</span><h2 class="section-title">Course curriculum</h2>
+            @if (Model.Modules.Count == 0) { <p class="text-secondary">The instructor is preparing the curriculum. Check back soon.</p> }
+            else { <div class="curriculum-list">@foreach (var module in Model.Modules.OrderBy(m => m.SortOrder)) { <div class="curriculum-module"><h3>@module.Title</h3>@if (module.Lessons.Count == 0) { <p class="text-secondary mb-0">Lessons coming soon</p> } else { <ul>@foreach (var lesson in module.Lessons.OrderBy(l => l.SortOrder)) { <li>@if (User.IsInRole("Student") && (bool)(ViewData["Enrolled"] ?? false)) { <a asp-action="Learn" asp-route-courseId="@Model.Id" asp-route-lessonId="@lesson.Id">@lesson.Title</a> } else { <span>@lesson.Title</span> }<span class="text-secondary">@(lesson.DurationMinutes > 0 ? $"{lesson.DurationMinutes} min" : "Lesson")</span></li> }</ul> }</div> }</div> }
+        </section>
     </div>
+    <aside class="col-lg-4"><div class="enroll-card"><span class="course-tag">SELF-PACED</span><h2>Start learning</h2><p>Join this course and learn on your schedule.</p>
+        @if (User.IsInRole("Student") && (bool)(ViewData["Enrolled"] ?? false) && ViewData["FirstLessonId"] is int firstLessonId) { <a class="btn btn-primary btn-lg w-100" asp-action="Learn" asp-route-courseId="@Model.Id" asp-route-lessonId="@firstLessonId">Continue learning</a> }
+        else if (User.IsInRole("Student")) { <form asp-action="Enroll" method="post"><input type="hidden" name="id" value="@Model.Id"/><button class="btn btn-primary btn-lg w-100" type="submit">Enroll for free</button></form> }
+        else if (User.Identity?.IsAuthenticated != true) { <a class="btn btn-primary btn-lg w-100" asp-controller="User" asp-action="Login" asp-route-returnUrl="@Url.Action("Details", "Course", new { id = Model.Id })">Sign in to enroll</a> }
+        else { <p class="small text-secondary mb-0">Student accounts can enroll in this course.</p> }
+        <div class="course-facts"><div><strong>@Model.Modules.Count</strong><span>modules</span></div><div><strong>@Model.Modules.Sum(m => m.Lessons.Count)</strong><span>lessons</span></div><div><strong>Free</strong><span>to enroll</span></div></div>
+    </div></aside>
 </div>
-</body>

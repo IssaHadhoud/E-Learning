@@ -3,35 +3,42 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - E_learning</title>
+    <title>@ViewData["Title"] - LearnSpace</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/E_learning.styles.css" asp-append-version="true"/>
+    <meta name="theme-color" content="#183153" />
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Course" asp-action="Index">E_learning</a>
+            <a class="navbar-brand fw-bold" asp-controller="Course" asp-action="Index">LearnSpace</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Create">New</a>
+                        <a class="nav-link" asp-controller="Course" asp-action="Index">Explore courses</a>
                     </li>
-                   
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item"><a class="nav-link" asp-controller="Course" asp-action="Create">Create course</a></li>
+                    }
                 </ul>
             </div>
-            <div class="Left">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">coures</a>
-                    </li>
+            <div class="d-flex align-items-center gap-2">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <span class="small text-secondary d-none d-md-inline">Hello, @User.Identity.Name</span>
+                    <form asp-controller="User" asp-action="Logout" method="post"><button class="btn btn-outline-secondary btn-sm" type="submit">Sign out</button></form>
+                }
+                else
+                {
+                    <a class="btn btn-link" asp-controller="User" asp-action="Login">Sign in</a>
+                    <a class="btn btn-primary" asp-controller="User" asp-action="Register">Get started</a>
+                }
                 </div>
         </div>
     </nav>
@@ -42,11 +49,7 @@
     </main>
 </div>
 
-@* <footer class="border-top footer text-muted"> *@
-@*     <div class="container"> *@
-@*         &copy; 2024 - E_learning - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-@*     </div> *@
-@* </footer> *@
+<footer class="border-top mt-5 py-4 text-secondary"><div class="container small">LearnSpace · Build skills for what’s next.</div></footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

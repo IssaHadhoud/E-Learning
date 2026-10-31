@@ -3643,11 +3643,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\E_learning.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\E-Learning\\E_learning.csproj",
       "projectName": "E_learning",
-      "projectPath": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\E_learning.csproj",
+      "projectPath": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\E-Learning\\E_learning.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\obj\\",
+      "outputPath": "C:\\Users\\USER\\Desktop\\E-learning\\E_learning\\E-Learning\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -21,6 +21,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <!-- E-Learning is a complete sibling copy kept for reference. It is not
+           part of this project's compilation or content tree. -->
+      <Compile Remove="E-Learning\**\*.cs" />
+      <Compile Remove="**\bin\**\*.cs;**\obj\**\*.cs" />
+      <Content Remove="E-Learning\**\*" />
+      <None Remove="E-Learning\**\*" />
+    </ItemGroup>
+
+    <ItemGroup>
       <_ContentIncludedByDefault Remove="Pages\Student\Add.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Student\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Teacher\Index.cshtml" />

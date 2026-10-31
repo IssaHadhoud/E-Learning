@@ -1,81 +1,26 @@
-@model List<E_learning.Models.Courses>
-
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-}
-<style>
-
-.container {
-    margin-top: 20px;
-}
-
-.btn-new-course {
-    margin-bottom: 20px;
-}
-
-
-.course-card {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(222,222,222,0.1);
-    overflow: hidden;
-    transition: transform 0.2s ease;
-}
-
-.course-card:hover {
-    transform: scale(1.05);
-}
-
-.course-image {
-    height: 200px;
-    overflow: hidden;
-}
-
-.course-image-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.course-card:hover .course-image-img {
-    transform: scale(1.1);
-}
-
-
-.course-details {
-    padding: 15px;
-    text-align: center;
-}
-
-.course-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0;
-    color: #343a40;
-}
-</style>
-
-<h2>Course</h2>
-<div class="container">
-     <!-- <a asp-action="Create" class="btn btn-primary btn-new-course">New Course</a> -->
-    <div class="course-list row"> 
-        @foreach (var course in Model)
-        {
-            <div class="col-md-4 col-sm-6 mb-4">
-                <div class="course-card">
-                    <div class="course-image">
-                        <a asp-action="Details" asp-route-id="@course?.Id">
-                            <img src="~/@course.ImageURL" alt="@course.Title" class="course-image-img">
-                        </a>
-                    </div>
-                    <div class="course-details">
-                        <h3 class="course-title">@course.Title</h3>
-                    </div>
-                </div>
-            </div>
-        }
+@model IReadOnlyList<E_learning.Models.Courses>
+@{ ViewData["Title"] = "Explore courses"; var page = (int)(ViewData["Page"] ?? 1); var search = ViewData["Search"] as string; }
+<section class="catalog-hero">
+    <div><span class="eyebrow">LEARN AT YOUR PACE</span><h1>Build skills for what’s next.</h1><p>Practical courses, thoughtful instructors, and a clear path to your next goal.</p></div>
+    <form asp-action="Index" method="get" class="catalog-search"><label class="visually-hidden" for="search">Search courses</label><input id="search" name="search" value="@search" class="form-control form-control-lg" placeholder="Search courses"/><button class="btn btn-primary btn-lg" type="submit">Search</button></form>
+</section>
+<div class="d-flex align-items-end justify-content-between mb-4"><div><span class="eyebrow">THE CATALOG</span><h2 class="section-title">Explore courses</h2></div><span class="text-secondary">@(Model.Count) course@(Model.Count == 1 ? "" : "s")</span></div>
+@if (TempData["Notice"] is string notice) { <div class="alert alert-info">@notice</div> }
+@if ((bool)(ViewData["CatalogUnavailable"] ?? false)) { <div class="empty-state"><h3>Courses are temporarily unavailable</h3><p>Please check your database connection and try again.</p></div> }
+else if (Model.Count == 0) { <div class="empty-state"><h3>No courses found</h3><p>Try another search, or check back soon for new classes.</p></div> }
+else
+{
+    <div class="row g-4">
+    @foreach (var course in Model)
+    {
+        <div class="col-md-6 col-xl-4"><article class="course-card h-100">
+            <a class="course-card-image" asp-action="Details" asp-route-id="@course.Id" aria-label="View @course.Title">
+                @if (!string.IsNullOrWhiteSpace(course.ImageURL)) { <img src="~/@course.ImageURL" alt="" loading="lazy"/> }
+                else { <span class="course-placeholder">LS</span> }
+            </a>
+            <div class="course-card-body"><span class="course-tag">@(course.Category?.Name ?? "Self-paced")</span><h3><a asp-action="Details" asp-route-id="@course.Id">@course.Title</a></h3><p>@(course.Details.Length > 150 ? course.Details[..150] + "…" : course.Details)</p><div class="course-card-footer"><span>On-demand learning</span><a asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm">View course</a></div></div>
+        </article></div>
+    }
     </div>
-</div>
+    @if ((bool)(ViewData["HasMore"] ?? false)) { <div class="text-center mt-5"><a class="btn btn-outline-primary" asp-action="Index" asp-route-search="@search" asp-route-page="@(page + 1)">Load more</a></div> }
+}

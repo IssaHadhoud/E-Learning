@@ -9,7 +9,7 @@ public class Teacher: Users
     [ForeignKey("CoursesId")]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     
-   public Courses Courses { get; set; }
+   public Courses Courses { get; set; } = null!;
    
 
    
